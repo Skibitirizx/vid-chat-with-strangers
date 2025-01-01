@@ -3,43 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Chat with Strangers</title>
+    <title>Random Video Chat with Strangers</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <header>
             <img src="assets/logo.png" alt="Logo" class="logo">
+            <h1>Chat with Strangers</h1>
         </header>
 
         <main>
-            <h1>Video Chat with Strangers</h1>
-            <p>Click below to start chatting with someone new!</p>
-            <button id="startButton">Start Chat</button>
-
-            <div id="permissionContainer" class="hidden">
-                <p>Please allow access to your camera and microphone to start chatting.</p>
-                <button id="allowButton">Allow</button>
-                <button id="denyButton">Deny</button>
-            </div>
-
-            <div id="videoContainer" class="hidden">
-                <div id="localVideoContainer">
-                    <video id="userVideo" autoplay muted></video>
-                    <div id="controls">
-                        <button id="muteButton">Mute</button>
-                        <button id="stopVideoButton">Stop Video</button>
+            <div id="chat-container" class="hidden">
+                <div class="video-container">
+                    <div id="local-video">
+                        <video id="user-video" autoplay muted></video>
+                    </div>
+                    <div id="remote-video">
+                        <video id="stranger-video" autoplay></video>
                     </div>
                 </div>
-                <div id="strangerContainer">
-                    <video id="strangerVideo" autoplay></video>
+                <div class="controls">
+                    <button id="skip-btn" class="control-btn">Next</button>
+                    <button id="end-chat-btn" class="control-btn">End Chat</button>
+                    <div class="chat-box">
+                        <textarea id="message-box" placeholder="Type a message..."></textarea>
+                        <button id="send-btn" class="control-btn">Send</button>
+                    </div>
                 </div>
-                <button id="chatButton" class="hidden">Chat</button>
+            </div>
+
+            <div id="start-container">
+                <h2>Ready to meet someone new?</h2>
+                <button id="start-chat-btn" class="main-btn">Start Chat</button>
             </div>
         </main>
 
         <footer>
-            <p>Video Chat App | Designed with simplicity in mind</p>
+            <p>&copy; 2025 Random Video Chat | All rights reserved</p>
         </footer>
     </div>
 

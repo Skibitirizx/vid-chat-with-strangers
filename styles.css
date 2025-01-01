@@ -1,4 +1,4 @@
-/* Reset default styles */
+/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -6,8 +6,8 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #121212;
+    font-family: Arial, sans-serif;
+    background-color: #111;
     color: white;
     display: flex;
     justify-content: center;
@@ -16,10 +16,11 @@ body {
     flex-direction: column;
 }
 
-.app-container {
+.container {
     text-align: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 900px;
+    padding: 20px;
 }
 
 header {
@@ -31,24 +32,23 @@ header {
 }
 
 h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
+    font-size: 2.5rem;
+    margin-top: 10px;
 }
 
-p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
+#start-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
 }
 
 button {
-    background-color: #00aaff;
-    color: white;
-    border: none;
     padding: 15px 30px;
+    background-color: #00aaff;
+    border: none;
+    color: white;
     font-size: 1.2rem;
     cursor: pointer;
     border-radius: 5px;
-    margin: 10px;
     transition: background-color 0.3s;
 }
 
@@ -56,44 +56,66 @@ button:hover {
     background-color: #0077cc;
 }
 
-#videoContainer {
+#chat-container {
+    display: none;
+}
+
+.video-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    justify-content: space-around;
+    margin-bottom: 20px;
 }
 
 video {
-    width: 80%;
-    max-width: 500px;
-    margin-top: 20px;
+    width: 45%;
     border-radius: 10px;
 }
 
-#localVideoContainer {
-    position: relative;
+.controls {
+    margin-top: 20px;
 }
 
-#controls {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+.control-btn {
+    margin: 10px;
+    font-size: 1rem;
+}
+
+.chat-box {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#message-box {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+footer {
+    margin-top: 30px;
+    color: #888;
 }
 
 .hidden {
     display: none;
 }
 
-footer {
-    margin-top: 30px;
-    font-size: 0.9rem;
-    color: #999;
-}
-
+/* Mobile responsiveness */
 @media (max-width: 768px) {
     video {
+        width: 90%;
+    }
+
+    .controls {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-box {
         width: 100%;
     }
 }

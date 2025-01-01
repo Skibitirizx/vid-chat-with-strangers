@@ -9,36 +9,33 @@
 <body>
     <div class="container">
         <header>
-            <img src="assets/logo.png" alt="Logo" class="logo">
             <h1>Video Chat with Strangers</h1>
         </header>
 
-        <main id="main-content">
-            <div id="permission-container">
-                <h2>Please Allow Camera and Microphone Access</h2>
-                <button id="allow-button">Allow</button>
-            </div>
-
-            <div id="chat-container" class="hidden">
-                <div class="video-container">
-                    <div id="local-video">
-                        <video id="user-video" autoplay muted></video>
-                    </div>
-                    <div id="remote-video">
-                        <video id="stranger-video" autoplay></video>
-                    </div>
+        <div id="chat-container" class="hidden">
+            <div class="video-container">
+                <div id="local-video">
+                    <video id="user-video" autoplay muted></video>
                 </div>
-                <div class="controls">
-                    <button id="skip-btn" class="control-btn">Next</button>
-                    <button id="end-chat-btn" class="control-btn">End Chat</button>
+                <div id="remote-video">
+                    <video id="stranger-video" autoplay></video>
                 </div>
             </div>
-
-            <div id="start-container">
-                <h2>Ready to meet someone new?</h2>
-                <button id="start-chat-btn" class="main-btn">Start Chat</button>
+            <div class="controls">
+                <button id="skip-btn" class="main-btn">Next</button>
+                <button id="end-chat-btn" class="main-btn">End Chat</button>
             </div>
-        </main>
+        </div>
+
+        <div id="permission-container" class="container-center">
+            <h2>Please Allow Camera and Microphone Access</h2>
+            <button id="allow-button" class="main-btn">Allow</button>
+        </div>
+
+        <div id="start-container" class="container-center">
+            <h2>Ready to chat?</h2>
+            <button id="start-chat-btn" class="main-btn">Start Chat</button>
+        </div>
 
         <footer>
             <p>&copy; 2025 Video Chat | All rights reserved</p>

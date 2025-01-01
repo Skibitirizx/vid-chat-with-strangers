@@ -15,39 +15,51 @@ let localStream;
 let peerConnection;
 let remoteStream;
 
-// Turn on the video chat when "Start" is clicked
+// Prompt for camera and microphone permissions when the page loads
+async function requestMediaPermissions() {
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        myVideo.srcObject = localStream;
+        startBtn.disabled = false;  // Enable the "Start" button after permissions are granted
+    } catch (err) {
+        console.error('Error accessing media devices.', err);
+        alert('Please allow access to the camera and microphone to continue.');
+    }
+}
+
+requestMediaPermissions();  // Request permissions on page load
+
+// Handle start button click
 startBtn.addEventListener('click', startVideoCall);
 
 async function startVideoCall() {
     try {
-        // Request camera and microphone
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        myVideo.srcObject = localStream;
-
         // Create peer connection
         peerConnection = new RTCPeerConnection();
+
+        // Add the local stream to the peer connection
         localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-        // Get remote stream and display it
+        // Handle incoming tracks from the peer (remote stream)
         peerConnection.ontrack = event => {
             remoteStream = event.streams[0];
-            peerVideo.srcObject = remoteStream;
+            peerVideo.srcObject = remoteStream;  // Display remote stream (right square)
         };
 
-        // Connect to another user (simulating)
+        // Create an offer and send it to the peer (simulating peer connection)
         await simulatePeerConnection();
 
         // Show the skip and report buttons
         skipBtn.style.display = 'inline-block';
         reportBtn.style.display = 'inline-block';
     } catch (err) {
-        console.error('Error accessing media devices.', err);
+        console.error('Error during video call setup.', err);
     }
 }
 
-// Simulate connecting with another user using Socket.io signaling
+// Simulate connecting with another user (this would normally be handled by signaling via Socket.io)
 async function simulatePeerConnection() {
-    // Send offer
+    // Send offer to peer
     socket.emit('offer', {}, 'target-user-id');
 }
 
@@ -63,7 +75,7 @@ reportBtn.addEventListener('click', () => {
     resetVideoCall();
 });
 
-// Reset video call
+// Reset the video call
 function resetVideoCall() {
     myVideo.srcObject = null;
     peerVideo.srcObject = null;

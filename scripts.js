@@ -1,35 +1,25 @@
-document.getElementById('startButton').addEventListener('click', startChat);
-document.getElementById('allowButton').addEventListener('click', allowPermissions);
-document.getElementById('denyButton').addEventListener('click', denyPermissions);
-document.getElementById('chatButton').addEventListener('click', openChatModal);
+document.getElementById('start-chat-btn').addEventListener('click', startChat);
+document.getElementById('skip-btn').addEventListener('click', skipChat);
+document.getElementById('end-chat-btn').addEventListener('click', endChat);
+document.getElementById('send-btn').addEventListener('click', sendMessage);
 
 let localStream;
 let remoteStream;
 let peerConnection;
 let dataChannel;
 
-const userVideo = document.getElementById('userVideo');
-const strangerVideo = document.getElementById('strangerVideo');
-const startButton = document.getElementById('startButton');
-const videoContainer = document.getElementById('videoContainer');
-const chatButton = document.getElementById('chatButton');
-const permissionContainer = document.getElementById('permissionContainer');
-const muteButton = document.getElementById('muteButton');
-const stopVideoButton = document.getElementById('stopVideoButton');
+const userVideo = document.getElementById('user-video');
+const strangerVideo = document.getElementById('stranger-video');
+const chatContainer = document.getElementById('chat-container');
+const startContainer = document.getElementById('start-container');
+const messageBox = document.getElementById('message-box');
 
-// Show permission prompt
-function startChat() {
-    startButton.classList.add('hidden');
-    permissionContainer.classList.remove('hidden');
-}
+// Start chat button click
+async function startChat() {
+    startContainer.classList.add('hidden');
+    chatContainer.classList.remove('hidden');
 
-// Allow permissions and start the chat
-async function allowPermissions() {
-    permissionContainer.classList.add('hidden');
-    videoContainer.classList.remove('hidden');
-    
     try {
-        // Request media access
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         userVideo.srcObject = localStream;
 
@@ -41,7 +31,7 @@ async function allowPermissions() {
 
         peerConnection.onicecandidate = event => {
             if (event.candidate) {
-                // Send candidates to the other peer (not implemented in this example)
+                // Send candidates to the other peer (signaling not implemented here)
             }
         };
 
@@ -60,27 +50,28 @@ async function allowPermissions() {
     }
 }
 
-// Deny permissions and alert the user
-function denyPermissions() {
-    permissionContainer.classList.add('hidden');
-    alert("You must allow camera and microphone access to join the chat.");
+// Skip chat (next match)
+function skipChat() {
+    // Logic for skipping to the next random match
+    alert('You have skipped the current chat!');
+    // Reset streams and restart the connection process
 }
 
-// Open chat modal
-function openChatModal() {
-    // Add logic to open chat or interact with the user
+// End the chat
+function endChat() {
+    // Close connection and stop streams
+    peerConnection.close();
+    localStream.getTracks().forEach(track => track.stop());
+    remoteStream.getTracks().forEach(track => track.stop());
+    chatContainer.classList.add('hidden');
+    startContainer.classList.remove('hidden');
 }
 
-// Mute audio
-muteButton.addEventListener('click', () => {
-    const isMuted = localStream.getAudioTracks()[0].enabled;
-    localStream.getAudioTracks()[0].enabled = !isMuted;
-    muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
-});
-
-// Stop video
-stopVideoButton.addEventListener('click', () => {
-    const isVideoStopped = localStream.getVideoTracks()[0].enabled;
-    localStream.getVideoTracks()[0].enabled = !isVideoStopped;
-    stopVideoButton.textContent = isVideoStopped ? 'Start Video' : 'Stop Video';
-});
+// Send message (future feature)
+function sendMessage() {
+    const message = messageBox.value;
+    if (message) {
+        console.log('Sent message:', message); // Implement message sending logic
+        messageBox.value = ''; // Clear input
+    }
+}

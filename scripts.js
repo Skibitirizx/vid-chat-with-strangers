@@ -31,7 +31,7 @@ async function startChat() {
 
         signalingServer = new WebSocket("ws://localhost:3000"); // Signaling server address
         signalingServer.onopen = () => {
-            signalingServer.send(JSON.stringify({ action: 'join' })); // Join the queue
+            signalingServer.send(JSON.stringify({ action: 'join' })); // Join the queue for matchmaking
         };
 
         signalingServer.onmessage = async (message) => {

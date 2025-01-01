@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Chat with Strangers</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Video Chat with Strangers</h1>
+        <button id="startButton">Start Chat</button>
+        <div id="permissionContainer" class="hidden">
+            <p>Please grant permission to access your camera and microphone to start chatting.</p>
+            <button id="allowButton">Allow</button>
+            <button id="denyButton">Deny</button>
+        </div>
+        <div id="videoContainer" class="hidden">
+            <div id="localVideoContainer">
+                <video id="userVideo" autoplay muted></video>
+                <div id="controls">
+                    <button id="muteButton">Mute</button>
+                    <button id="stopVideoButton">Stop Video</button>
+                    <button id="fullscreenButton">Fullscreen</button>
+                </div>
+            </div>
+            <div id="strangerContainer">
+                <video id="strangerVideo" autoplay></video>
+            </div>
+            <button id="chatButton" class="hidden">Start Chat</button>
+        </div>
+
+        <div id="chatModal" class="hidden">
+            <div class="chatModalContent">
+                <button id="closeChatModal">Close</button>
+                <div id="chatMessages" class="chatMessages"></div>
+                <input type="text" id="chatInput" placeholder="Type your message...">
+                <button id="sendMessageButton">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

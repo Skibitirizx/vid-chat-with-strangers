@@ -2,8 +2,6 @@ document.getElementById('startButton').addEventListener('click', startChat);
 document.getElementById('allowButton').addEventListener('click', allowPermissions);
 document.getElementById('denyButton').addEventListener('click', denyPermissions);
 document.getElementById('chatButton').addEventListener('click', openChatModal);
-document.getElementById('closeChatModal').addEventListener('click', closeChatModal);
-document.getElementById('sendMessageButton').addEventListener('click', sendMessage);
 
 let localStream;
 let remoteStream;
@@ -18,9 +16,6 @@ const chatButton = document.getElementById('chatButton');
 const permissionContainer = document.getElementById('permissionContainer');
 const muteButton = document.getElementById('muteButton');
 const stopVideoButton = document.getElementById('stopVideoButton');
-const fullscreenButton = document.getElementById('fullscreenButton');
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
 
 // Show permission prompt
 function startChat() {
@@ -50,13 +45,6 @@ async function allowPermissions() {
             }
         };
 
-        peerConnection.ondatachannel = event => {
-            const receivedChannel = event.channel;
-            receivedChannel.onmessage = (event) => {
-                addChatMessage("Stranger", event.data);
-            };
-        };
-
         // Simulate video connection with the remote peer
         setTimeout(() => {
             remoteStream = localStream; // For simplicity, using the same local stream
@@ -80,29 +68,7 @@ function denyPermissions() {
 
 // Open chat modal
 function openChatModal() {
-    document.getElementById('chatModal').classList.remove('hidden');
-}
-
-// Close chat modal
-function closeChatModal() {
-    document.getElementById('chatModal').classList.add('hidden');
-}
-
-// Send chat message
-function sendMessage() {
-    const message = chatInput.value;
-    if (message) {
-        dataChannel.send(message);
-        addChatMessage("You", message);
-        chatInput.value = '';
-    }
-}
-
-// Display chat messages
-function addChatMessage(sender, message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.textContent = `${sender}: ${message}`;
-    chatMessages.appendChild(messageDiv);
+    // Add logic to open chat or interact with the user
 }
 
 // Mute audio
@@ -117,13 +83,4 @@ stopVideoButton.addEventListener('click', () => {
     const isVideoStopped = localStream.getVideoTracks()[0].enabled;
     localStream.getVideoTracks()[0].enabled = !isVideoStopped;
     stopVideoButton.textContent = isVideoStopped ? 'Start Video' : 'Stop Video';
-});
-
-// Toggle fullscreen
-fullscreenButton.addEventListener('click', () => {
-    if (document.fullscreenElement) {
-        document.exitFullscreen();
-    } else {
-        document.documentElement.requestFullscreen();
-    }
 });

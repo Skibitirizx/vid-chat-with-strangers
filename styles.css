@@ -80,21 +80,6 @@ video {
     font-size: 1rem;
 }
 
-.chat-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-#message-box {
-    width: 80%;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-}
-
 footer {
     margin-top: 30px;
     color: #888;
@@ -104,7 +89,6 @@ footer {
     display: none;
 }
 
-/* Mobile responsiveness */
 @media (max-width: 768px) {
     video {
         width: 90%;
@@ -113,9 +97,5 @@ footer {
     .controls {
         display: flex;
         flex-direction: column;
-    }
-
-    .chat-box {
-        width: 100%;
     }
 }

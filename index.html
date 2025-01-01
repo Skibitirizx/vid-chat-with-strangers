@@ -12,33 +12,30 @@
             <h1>Video Chat with Strangers</h1>
         </header>
 
+        <div id="permission-container" class="centered">
+            <h2>Allow Camera and Microphone Access</h2>
+            <button id="allow-button" class="action-btn">Allow</button>
+        </div>
+
+        <div id="start-container" class="centered hidden">
+            <h2>Ready to Chat?</h2>
+            <button id="start-chat-btn" class="action-btn">Start Chat</button>
+        </div>
+
         <div id="chat-container" class="hidden">
             <div class="video-container">
-                <div id="local-video">
-                    <video id="user-video" autoplay muted></video>
-                </div>
-                <div id="remote-video">
-                    <video id="stranger-video" autoplay></video>
-                </div>
+                <video id="user-video" autoplay muted></video>
+                <video id="stranger-video" autoplay></video>
             </div>
+
             <div class="controls">
-                <button id="skip-btn" class="main-btn">Next</button>
-                <button id="end-chat-btn" class="main-btn">End Chat</button>
+                <button id="skip-btn" class="action-btn">Next</button>
+                <button id="end-chat-btn" class="action-btn">End Chat</button>
             </div>
-        </div>
-
-        <div id="permission-container" class="container-center">
-            <h2>Please Allow Camera and Microphone Access</h2>
-            <button id="allow-button" class="main-btn">Allow</button>
-        </div>
-
-        <div id="start-container" class="container-center">
-            <h2>Ready to chat?</h2>
-            <button id="start-chat-btn" class="main-btn">Start Chat</button>
         </div>
 
         <footer>
-            <p>&copy; 2025 Video Chat | All rights reserved</p>
+            <p>&copy; 2025 Video Chat | All Rights Reserved</p>
         </footer>
     </div>
 

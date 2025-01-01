@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Video Chat with Strangers</title>
+    <title>Video Chat with Strangers</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
             <img src="assets/logo.png" alt="Logo" class="logo">
-            <h1>Chat with Strangers</h1>
+            <h1>Video Chat with Strangers</h1>
         </header>
 
-        <main>
+        <main id="main-content">
+            <div id="permission-container">
+                <h2>Please Allow Camera and Microphone Access</h2>
+                <button id="allow-button">Allow</button>
+            </div>
+
             <div id="chat-container" class="hidden">
                 <div class="video-container">
                     <div id="local-video">
@@ -26,10 +31,6 @@
                 <div class="controls">
                     <button id="skip-btn" class="control-btn">Next</button>
                     <button id="end-chat-btn" class="control-btn">End Chat</button>
-                    <div class="chat-box">
-                        <textarea id="message-box" placeholder="Type a message..."></textarea>
-                        <button id="send-btn" class="control-btn">Send</button>
-                    </div>
                 </div>
             </div>
 
@@ -40,7 +41,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2025 Random Video Chat | All rights reserved</p>
+            <p>&copy; 2025 Video Chat | All rights reserved</p>
         </footer>
     </div>
 

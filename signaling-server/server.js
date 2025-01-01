@@ -1,0 +1,40 @@
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 3000 });
+
+let waitingClients = [];
+
+wss.on('connection', (ws) => {
+    console.log("Client connected.");
+
+    ws.on('message', (message) => {
+        const data = JSON.parse(message);
+
+        if (data.action === 'join') {
+            waitingClients.push(ws);
+            console.log('Client joined the queue.');
+            if (waitingClients.length >= 2) {
+                // Match two clients
+                const client1 = waitingClients.shift();
+                const client2 = waitingClients.shift();
+
+                client1.send(JSON.stringify({ action: 'start', offer: 'offer-details' }));
+                client2.send(JSON.stringify({ action: 'start', offer: 'offer-details' }));
+            }
+        }
+
+        if (data.action === 'offer') {
+            // Handle the offer from the client and send back to another client
+        }
+
+        if (data.action === 'candidate') {
+            // Handle ICE candidates
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected.');
+        // Remove from queue if disconnected
+    });
+});
+
+console.log('Signaling server running on ws://localhost:3000');

@@ -17,27 +17,47 @@ wss.on('connection', (ws) => {
                 const client1 = waitingClients.shift();
                 const client2 = waitingClients.shift();
 
-                client1.send(JSON.stringify({ action: 'start', offer: 'offer-details' }));
-                client2.send(JSON.stringify({ action: 'start', offer: 'offer-details' }));
+                client1.send(JSON.stringify({ action: 'start', offer: null }));
+                client2.send(JSON.stringify({ action: 'start', offer: null }));
             }
         }
 
         if (data.action === 'offer') {
-            // Handle offer and send response
+            const peer = waitingClients.find((client) => client !== ws);
+            if (peer) {
+                peer.send(JSON.stringify({ action: 'offer', offer: data.offer }));
+            }
+        }
+
+        if (data.action === 'answer') {
+            const peer = waitingClients.find((client) => client !== ws);
+            if (peer) {
+                peer.send(JSON.stringify({ action: 'answer', answer: data.answer }));
+            }
         }
 
         if (data.action === 'candidate') {
-            // Handle ICE candidates
+            const peer = waitingClients.find((client) => client !== ws);
+            if (peer) {
+                peer.send(JSON.stringify({ action: 'candidate', candidate: data.candidate }));
+            }
         }
 
         if (data.action === 'skip') {
-            // Handle skipping and re-queueing users
+            const index = waitingClients.indexOf(ws);
+            if (index !== -1) {
+                waitingClients.splice(index, 1);
+            }
+            ws.send(JSON.stringify({ action: 'skip' }));
         }
     });
 
     ws.on('close', () => {
         console.log('Client disconnected.');
-        // Remove client from waiting queue
+        const index = waitingClients.indexOf(ws);
+        if (index !== -1) {
+            waitingClients.splice(index, 1);
+        }
     });
 });
 

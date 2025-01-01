@@ -1,0 +1,127 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and general layout */
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ccc;
+}
+
+video {
+    width: 45%;
+    margin: 10px;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+#videoContainer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#localVideoContainer {
+    position: relative;
+}
+
+#controls {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+#chatModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chatModalContent {
+    background-color: white;
+    padding: 20px;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatMessages {
+    height: 300px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+#chatInput {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#chatInput:focus {
+    outline: none;
+    border: 2px solid #ccc;
+}
+
+#sendMessageButton {
+    padding: 10px;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+}
+
+#sendMessageButton:hover {
+    background-color: #bbb;
+}
+
+@media (max-width: 768px) {
+    #videoContainer {
+        flex-direction: column;
+    }
+
+    video {
+        width: 90%;
+    }
+}

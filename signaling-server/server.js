@@ -23,17 +23,21 @@ wss.on('connection', (ws) => {
         }
 
         if (data.action === 'offer') {
-            // Handle the offer from the client and send back to another client
+            // Handle offer and send response
         }
 
         if (data.action === 'candidate') {
             // Handle ICE candidates
         }
+
+        if (data.action === 'skip') {
+            // Handle skipping and re-queueing users
+        }
     });
 
     ws.on('close', () => {
         console.log('Client disconnected.');
-        // Remove from queue if disconnected
+        // Remove client from waiting queue
     });
 });
 

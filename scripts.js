@@ -11,16 +11,16 @@ let remoteStream;
 const userVideo = document.getElementById('user-video');
 const strangerVideo = document.getElementById('stranger-video');
 const permissionContainer = document.getElementById('permission-container');
-const chatContainer = document.getElementById('chat-container');
 const startContainer = document.getElementById('start-container');
+const chatContainer = document.getElementById('chat-container');
 
-// Force permission for video and audio
+// Step 1: Ask for permissions to access camera and microphone
 function allowPermissions() {
     permissionContainer.classList.add('hidden');
     startContainer.classList.remove('hidden');
 }
 
-// Start the chat
+// Step 2: Start chat when the button is clicked
 async function startChat() {
     startContainer.classList.add('hidden');
     chatContainer.classList.remove('hidden');
@@ -47,11 +47,11 @@ async function startChat() {
         };
 
     } catch (error) {
-        alert("Permission denied or error accessing camera/microphone. You cannot join the chat.");
+        alert("Permission denied or error accessing camera/microphone.");
     }
 }
 
-// WebRTC peer connection setup
+// Step 3: WebRTC peer connection setup
 function initiatePeerConnection() {
     peerConnection = new RTCPeerConnection();
 
@@ -77,13 +77,14 @@ function initiatePeerConnection() {
     }).catch(err => console.error("Offer creation failed:", err));
 }
 
-// Skip to the next person
+// Step 4: Skip chat functionality
 function skipChat() {
-    console.log("Skipping chat...");
-    // Handle skipping and matching with a new user
+    console.log("Skipping to next user...");
+    // Reset and rejoin queue for matchmaking
+    signalingServer.send(JSON.stringify({ action: 'skip' }));
 }
 
-// End the chat
+// Step 5: End chat
 function endChat() {
     peerConnection.close();
     localStream.getTracks().forEach(track => track.stop());

@@ -5,51 +5,69 @@
     box-sizing: border-box;
 }
 
-/* Body and general layout */
 body {
-    background-color: black;
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
     color: white;
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    text-align: center;
     flex-direction: column;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.app-container {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 150px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
 }
 
 button {
-    background-color: white;
-    color: black;
+    background-color: #00aaff;
+    color: white;
     border: none;
     padding: 15px 30px;
-    margin: 10px;
-    font-size: 18px;
+    font-size: 1.2rem;
     cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #ccc;
-}
-
-video {
-    width: 45%;
-    margin: 10px;
-    border: 2px solid white;
-    border-radius: 10px;
+    background-color: #0077cc;
 }
 
 #videoContainer {
     display: flex;
-    justify-content: space-around;
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+video {
+    width: 80%;
+    max-width: 500px;
+    margin-top: 20px;
+    border-radius: 10px;
 }
 
 #localVideoContainer {
@@ -58,8 +76,8 @@ video {
 
 #controls {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 20px;
+    left: 20px;
     display: flex;
     gap: 10px;
 }
@@ -68,60 +86,14 @@ video {
     display: none;
 }
 
-#chatModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.chatModalContent {
-    background-color: white;
-    padding: 20px;
-    width: 400px;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-}
-
-.chatMessages {
-    height: 300px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-}
-
-#chatInput {
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-#chatInput:focus {
-    outline: none;
-    border: 2px solid #ccc;
-}
-
-#sendMessageButton {
-    padding: 10px;
-    background-color: #ccc;
-    border: none;
-    cursor: pointer;
-}
-
-#sendMessageButton:hover {
-    background-color: #bbb;
+footer {
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #999;
 }
 
 @media (max-width: 768px) {
-    #videoContainer {
-        flex-direction: column;
-    }
-
     video {
-        width: 90%;
+        width: 100%;
     }
 }

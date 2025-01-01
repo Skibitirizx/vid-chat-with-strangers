@@ -1,93 +1,68 @@
-document.getElementById('allow-button').addEventListener('click', allowPermissions);
-document.getElementById('start-chat-btn').addEventListener('click', startChat);
-document.getElementById('skip-btn').addEventListener('click', skipChat);
-document.getElementById('end-chat-btn').addEventListener('click', endChat);
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 3000 });
 
-let localStream;
-let peerConnection;
-let signalingServer;
-let remoteStream;
+let waitingClients = [];
 
-const userVideo = document.getElementById('user-video');
-const strangerVideo = document.getElementById('stranger-video');
-const permissionContainer = document.getElementById('permission-container');
-const startContainer = document.getElementById('start-container');
-const chatContainer = document.getElementById('chat-container');
+wss.on('connection', (ws) => {
+    console.log("Client connected.");
 
-// Step 1: Ask for permissions to access camera and microphone
-function allowPermissions() {
-    permissionContainer.classList.add('hidden');
-    startContainer.classList.remove('hidden');
-}
+    ws.on('message', (message) => {
+        const data = JSON.parse(message);
 
-// Step 2: Start chat when the button is clicked
-async function startChat() {
-    startContainer.classList.add('hidden');
-    chatContainer.classList.remove('hidden');
+        if (data.action === 'join') {
+            waitingClients.push(ws);
+            console.log('Client joined the queue.');
+            if (waitingClients.length >= 2) {
+                // Match two clients
+                const client1 = waitingClients.shift();
+                const client2 = waitingClients.shift();
 
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        userVideo.srcObject = localStream;
-
-        signalingServer = new WebSocket("ws://localhost:3000"); // Signaling server address
-        signalingServer.onopen = () => {
-            signalingServer.send(JSON.stringify({ action: 'join' })); // Join the queue
-        };
-
-        signalingServer.onmessage = async (message) => {
-            const data = JSON.parse(message.data);
-            if (data.action === 'start') {
-                initiatePeerConnection();
-                signalingServer.send(JSON.stringify({ action: 'start', offer: data.offer }));
+                client1.send(JSON.stringify({ action: 'start', offer: null }));
+                client2.send(JSON.stringify({ action: 'start', offer: null }));
             }
-        };
-
-        signalingServer.onclose = () => {
-            console.log("Connection to signaling server closed");
-        };
-
-    } catch (error) {
-        alert("Permission denied or error accessing camera/microphone.");
-    }
-}
-
-// Step 3: WebRTC peer connection setup
-function initiatePeerConnection() {
-    peerConnection = new RTCPeerConnection();
-
-    // Add local stream tracks to the peer connection
-    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-    peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-            signalingServer.send(JSON.stringify({ action: 'candidate', candidate: event.candidate }));
         }
-    };
 
-    peerConnection.ontrack = (event) => {
-        if (event.streams[0]) {
-            strangerVideo.srcObject = event.streams[0];
+        if (data.action === 'offer') {
+            // Forward the offer to the other client
+            const peer = waitingClients.find((client) => client !== ws);
+            if (peer) {
+                peer.send(JSON.stringify({ action: 'offer', offer: data.offer }));
+            }
         }
-    };
 
-    // Create an offer and send it to the other peer
-    peerConnection.createOffer().then((offer) => {
-        peerConnection.setLocalDescription(offer);
-        signalingServer.send(JSON.stringify({ action: 'offer', offer: offer }));
-    }).catch(err => console.error("Offer creation failed:", err));
-}
+        if (data.action === 'answer') {
+            // Forward the answer to the other client
+            const peer = waitingClients.find((client) => client !== ws);
+            if (peer) {
+                peer.send(JSON.stringify({ action: 'answer', answer: data.answer }));
+            }
+        }
 
-// Step 4: Skip chat functionality
-function skipChat() {
-    console.log("Skipping to next user...");
-    // Reset and rejoin queue for matchmaking
-    signalingServer.send(JSON.stringify({ action: 'skip' }));
-}
+        if (data.action === 'candidate') {
+            // Forward the ICE candidate to the other client
+            const peer = waitingClients.find((client) => client !== ws);
+            if (peer) {
+                peer.send(JSON.stringify({ action: 'candidate', candidate: data.candidate }));
+            }
+        }
 
-// Step 5: End chat
-function endChat() {
-    peerConnection.close();
-    localStream.getTracks().forEach(track => track.stop());
-    chatContainer.classList.add('hidden');
-    startContainer.classList.remove('hidden');
-}
+        if (data.action === 'skip') {
+            // Remove the client from the queue
+            const index = waitingClients.indexOf(ws);
+            if (index !== -1) {
+                waitingClients.splice(index, 1);
+            }
+            ws.send(JSON.stringify({ action: 'skip' }));
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected.');
+        const index = waitingClients.indexOf(ws);
+        if (index !== -1) {
+            waitingClients.splice(index, 1);
+        }
+    });
+});
+
+console.log('Signaling server running on ws://localhost:3000');

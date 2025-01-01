@@ -1,77 +1,40 @@
-document.getElementById('start-chat-btn').addEventListener('click', startChat);
-document.getElementById('skip-btn').addEventListener('click', skipChat);
-document.getElementById('end-chat-btn').addEventListener('click', endChat);
-document.getElementById('send-btn').addEventListener('click', sendMessage);
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 3000 });
 
-let localStream;
-let remoteStream;
-let peerConnection;
-let dataChannel;
+let waitingClients = [];
 
-const userVideo = document.getElementById('user-video');
-const strangerVideo = document.getElementById('stranger-video');
-const chatContainer = document.getElementById('chat-container');
-const startContainer = document.getElementById('start-container');
-const messageBox = document.getElementById('message-box');
+wss.on('connection', (ws) => {
+    console.log("Client connected.");
 
-// Start chat button click
-async function startChat() {
-    startContainer.classList.add('hidden');
-    chatContainer.classList.remove('hidden');
+    ws.on('message', (message) => {
+        const data = JSON.parse(message);
 
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        userVideo.srcObject = localStream;
+        if (data.action === 'join') {
+            waitingClients.push(ws);
+            console.log('Client joined the queue.');
+            if (waitingClients.length >= 2) {
+                // Match two clients
+                const client1 = waitingClients.shift();
+                const client2 = waitingClients.shift();
 
-        // Set up peer-to-peer connection
-        peerConnection = new RTCPeerConnection();
-        dataChannel = peerConnection.createDataChannel("chat");
-
-        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-        peerConnection.onicecandidate = event => {
-            if (event.candidate) {
-                // Send candidates to the other peer (signaling not implemented here)
+                client1.send(JSON.stringify({ action: 'start', offer: 'offer-details' }));
+                client2.send(JSON.stringify({ action: 'start', offer: 'offer-details' }));
             }
-        };
+        }
 
-        // Simulate video connection with the remote peer
-        setTimeout(() => {
-            remoteStream = localStream; // For simplicity, using the same local stream
-            strangerVideo.srcObject = remoteStream;
-        }, 2000);
+        if (data.action === 'offer') {
+            // Handle the offer from the client and send back to another client
+        }
 
-        peerConnection.createOffer().then(offer => {
-            peerConnection.setLocalDescription(offer);
-        }).catch(err => console.error("Offer creation failed:", err));
-    } catch (error) {
-        alert("Permission denied or error accessing camera/microphone. You cannot join the chat.");
-        console.error('Error accessing media devices:', error);
-    }
-}
+        if (data.action === 'candidate') {
+            // Handle ICE candidates
+        }
+    });
 
-// Skip chat (next match)
-function skipChat() {
-    // Logic for skipping to the next random match
-    alert('You have skipped the current chat!');
-    // Reset streams and restart the connection process
-}
+    ws.on('close', () => {
+        console.log('Client disconnected.');
+        // Remove from queue if disconnected
+    });
+});
 
-// End the chat
-function endChat() {
-    // Close connection and stop streams
-    peerConnection.close();
-    localStream.getTracks().forEach(track => track.stop());
-    remoteStream.getTracks().forEach(track => track.stop());
-    chatContainer.classList.add('hidden');
-    startContainer.classList.remove('hidden');
-}
-
-// Send message (future feature)
-function sendMessage() {
-    const message = messageBox.value;
-    if (message) {
-        console.log('Sent message:', message); // Implement message sending logic
-        messageBox.value = ''; // Clear input
-    }
-}
+console.log('Signaling server running on ws://localhost:3000');
